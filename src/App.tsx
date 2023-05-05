@@ -8,19 +8,26 @@ export const App: ComponentType = () => {
   const { appState, setAppState } = useAppContext();
 
   useEffect(() => {
-    (async () => {
-      const accessTokenId = window.localStorage.getItem('ACCESS_TOKEN_ID');
-      if (accessTokenId === null) {
-        setAppState((appState) => ({ ...appState, isAuthenticating: false }));
-        return;
-      }
-      await httpClient.get(`/access-tokens/${accessTokenId}`);
-      setAppState((appState) => ({
-        ...appState,
-        isAuthenticated: true,
-        isAuthenticating: false,
-      }));
-    })().catch(console.error);
+    const accessTokenId = window.localStorage.getItem('ACCESS_TOKEN_ID');
+    if (accessTokenId === null) {
+      setAppState((appState) => ({ ...appState, isAuthenticating: false }));
+      return;
+    }
+    const abortController = new AbortController();
+    httpClient
+      .request('get', `/access-tokens/${accessTokenId}`, { signal: abortController.signal })
+      .then(() => {
+        httpClient.setHeader('Authorization', `Bearer ${accessTokenId}`);
+        setAppState((appState) => ({
+          ...appState,
+          isAuthenticated: true,
+          isAuthenticating: false,
+        }));
+      });
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   if (appState.isAuthenticating) {

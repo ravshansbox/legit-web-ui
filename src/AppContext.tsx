@@ -22,17 +22,11 @@ export const AppContext = createContext({} as AppContextValue);
 
 export const useAppContext = () => useContext(AppContext);
 
-export const AppContextProvider: ComponentType<PropsWithChildren> = ({
-  children,
-}) => {
+export const AppContextProvider: ComponentType<PropsWithChildren> = ({ children }) => {
   const [appState, setAppState] = useState<AppStateValue>({
     isAuthenticated: false,
     isAuthenticating: true,
   });
 
-  return (
-    <AppContext.Provider value={{ appState, setAppState }}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={{ appState, setAppState }}>{children}</AppContext.Provider>;
 };

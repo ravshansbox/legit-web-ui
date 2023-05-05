@@ -1,23 +1,24 @@
-type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
-
-type Options = {
-  method: Method;
-  headers?: HeadersInit;
+export type FetchMethod = 'get' | 'post' | 'put' | 'delete';
+export type FetchJsonOptions = {
+  signal?: AbortSignal;
+  headers?: Record<string, string>;
   body?: unknown;
 };
 
-export const fetchJson = async (
+export const fetchJson = async <T = any>(
+  method: FetchMethod,
   url: string,
-  { method, headers, body }: Options
+  { signal, headers, body }: FetchJsonOptions = {}
 ) => {
   const response = await fetch(url, {
+    signal,
     method,
-    headers: {
+    headers: new Headers({
       ...headers,
       accepts: 'application/json',
       'content-type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    }),
+    body: body ? JSON.stringify(body) : null,
   });
-  return response.json();
+  return response.json() as T;
 };
