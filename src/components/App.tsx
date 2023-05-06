@@ -1,11 +1,10 @@
 import { ComponentType, useEffect } from 'react';
-import { useAppContext } from './AppContext';
+import { useAppContext } from '../AppContext';
 import { Home } from './Home';
 import { Login } from './Login';
-import { httpClient } from './httpClient';
 
 export const App: ComponentType = () => {
-  const { appState, setAppState } = useAppContext();
+  const { httpClient, appState, setAppState } = useAppContext();
 
   useEffect(() => {
     const accessTokenId = window.localStorage.getItem('ACCESS_TOKEN_ID');

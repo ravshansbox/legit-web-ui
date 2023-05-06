@@ -7,6 +7,7 @@ import {
   useContext,
   useState,
 } from 'react';
+import { HttpClient, createHttpClient } from './createHttpClient';
 
 type AppStateValue = {
   isAuthenticated: boolean;
@@ -14,9 +15,12 @@ type AppStateValue = {
 };
 
 type AppContextValue = {
+  httpClient: HttpClient;
   appState: AppStateValue;
   setAppState: Dispatch<SetStateAction<AppStateValue>>;
 };
+
+export const httpClient = createHttpClient(import.meta.env.VITE_API_BASE_URL);
 
 export const AppContext = createContext({} as AppContextValue);
 
@@ -28,5 +32,9 @@ export const AppContextProvider: ComponentType<PropsWithChildren> = ({ children 
     isAuthenticating: true,
   });
 
-  return <AppContext.Provider value={{ appState, setAppState }}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={{ httpClient, appState, setAppState }}>
+      {children}
+    </AppContext.Provider>
+  );
 };

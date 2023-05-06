@@ -1,9 +1,8 @@
 import { Field, Form, Formik } from 'formik';
 import { ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from './AppContext';
-import { httpClient } from './httpClient';
-import { styled } from './stitches';
+import { useAppContext } from '../AppContext';
+import { styled } from '../stitches';
 
 const FormStyled = styled(Form, {
   display: 'flex',
@@ -19,8 +18,28 @@ const LabelStyled = styled('label', {
   flexDirection: 'column',
 });
 
+const FieldStyled = styled(Field, {
+  borderColor: '$gray200',
+  borderStyle: 'solid',
+  borderWidth: '1px',
+  outlineColor: '$gray400',
+  paddingBlock: '$1',
+  paddingInline: '$2',
+});
+
+const ButtonStyled = styled('button', {
+  outlineColor: '$gray400',
+  backgroundColor: '$primary',
+  borderColor: '$primary',
+  borderStyle: 'solid',
+  borderWidth: '1px',
+  color: 'White',
+  paddingBlock: '$1',
+  paddingInline: '$2',
+});
+
 export const Login: ComponentType = () => {
-  const { setAppState } = useAppContext();
+  const { httpClient, setAppState } = useAppContext();
   const navigate = useNavigate();
 
   return (
@@ -36,13 +55,13 @@ export const Login: ComponentType = () => {
       <FormStyled autoComplete="off">
         <LabelStyled>
           <span>Username</span>
-          <Field type="text" name="username" />
+          <FieldStyled type="text" name="username" />
         </LabelStyled>
         <LabelStyled>
           <span>Password</span>
-          <Field type="password" name="password" />
+          <FieldStyled type="password" name="password" />
         </LabelStyled>
-        <button type="submit">Submit</button>
+        <ButtonStyled type="submit">Submit</ButtonStyled>
       </FormStyled>
     </Formik>
   );

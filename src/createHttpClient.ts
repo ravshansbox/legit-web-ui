@@ -19,3 +19,5 @@ export const createHttpClient = (baseUrl: string) => {
     },
   };
 };
+
+export type HttpClient = ReturnType<typeof createHttpClient>;
