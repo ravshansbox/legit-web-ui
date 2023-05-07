@@ -1,10 +1,12 @@
-import { ComponentType, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../AppContext';
 import { Home } from './Home';
 import { Login } from './Login';
 
-export const App: ComponentType = () => {
+export function App() {
   const { httpClient, appState, setAppState } = useAppContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const accessTokenId = window.localStorage.getItem('ACCESS_TOKEN_ID');
@@ -14,7 +16,9 @@ export const App: ComponentType = () => {
     }
     const abortController = new AbortController();
     httpClient
-      .request('get', `/access-tokens/${accessTokenId}`, { signal: abortController.signal })
+      .request('get', `/access-tokens/${accessTokenId}`, {
+        signal: abortController.signal,
+      })
       .then(() => {
         httpClient.setHeader('Authorization', `Bearer ${accessTokenId}`);
         setAppState((appState) => ({
@@ -22,6 +26,9 @@ export const App: ComponentType = () => {
           isAuthenticated: true,
           isAuthenticating: false,
         }));
+      })
+      .catch(() => {
+        navigate('/login');
       });
 
     return () => {
@@ -38,4 +45,4 @@ export const App: ComponentType = () => {
   }
 
   return <Home />;
-};
+}

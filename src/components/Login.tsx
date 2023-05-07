@@ -1,10 +1,10 @@
-import { Field, Form, Formik } from 'formik';
+import { useForm } from '@ravshansbox/react-form';
 import { ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../AppContext';
 import { styled } from '../stitches';
 
-const FormStyled = styled(Form, {
+const FormStyled = styled('form', {
   display: 'flex',
   flexDirection: 'column',
   gap: '16px',
@@ -18,7 +18,7 @@ const LabelStyled = styled('label', {
   flexDirection: 'column',
 });
 
-const FieldStyled = styled(Field, {
+const InputStyled = styled('input', {
   borderColor: '$gray200',
   borderStyle: 'solid',
   borderWidth: '1px',
@@ -41,28 +41,33 @@ const ButtonStyled = styled('button', {
 export const Login: ComponentType = () => {
   const { httpClient, setAppState } = useAppContext();
   const navigate = useNavigate();
+  const { Field, Form } = useForm({
+    initialValues: { username: '', password: '' },
+    handleSubmit: async (body) => {
+      const accessToken = await httpClient.request('post', '/access-tokens', {
+        body,
+      });
+      window.localStorage.setItem('ACCESS_TOKEN_ID', accessToken.id);
+      setAppState((appState) => ({ ...appState, isAuthenticated: true }));
+      navigate('/');
+    },
+  });
 
   return (
-    <Formik
-      initialValues={{ username: '', password: '' }}
-      onSubmit={async (body) => {
-        const accessToken = await httpClient.request('post', '/access-tokens', { body });
-        window.localStorage.setItem('ACCESS_TOKEN_ID', accessToken.id);
-        setAppState((appState) => ({ ...appState, isAuthenticated: true }));
-        navigate('/');
-      }}
-    >
-      <FormStyled autoComplete="off">
-        <LabelStyled>
-          <span>Username</span>
-          <FieldStyled type="text" name="username" />
-        </LabelStyled>
-        <LabelStyled>
-          <span>Password</span>
-          <FieldStyled type="password" name="password" />
-        </LabelStyled>
-        <ButtonStyled type="submit">Submit</ButtonStyled>
-      </FormStyled>
-    </Formik>
+    <FormStyled as={Form}>
+      <LabelStyled>
+        <span>Username</span>
+        <Field name="username">
+          {(props) => <InputStyled type="text" {...props} />}
+        </Field>
+      </LabelStyled>
+      <LabelStyled>
+        <span>Password</span>
+        <Field name="password">
+          {(props) => <InputStyled type="password" {...props} />}
+        </Field>
+      </LabelStyled>
+      <ButtonStyled type="submit">Submit</ButtonStyled>
+    </FormStyled>
   );
 };

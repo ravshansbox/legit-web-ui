@@ -2,7 +2,13 @@ import { flexRender, useReactTable } from '@tanstack/react-table';
 import { ColumnDef, Table, getCoreRowModel } from '@tanstack/table-core';
 import { styled } from '../stitches';
 
-export function useTable<TData>({ data, columns }: { data: TData[]; columns: ColumnDef<TData>[] }) {
+export function useTable<TData>({
+  data,
+  columns,
+}: {
+  data: TData[];
+  columns: ColumnDef<TData>[];
+}) {
   return useReactTable({
     data: data,
     columns: columns,
@@ -33,7 +39,10 @@ export function TableList<TData>({ table }: { table: Table<TData> }) {
               <HeadCell key={header.id}>
                 {header.isPlaceholder
                   ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
               </HeadCell>
             ))}
           </tr>
@@ -57,7 +66,10 @@ export function TableList<TData>({ table }: { table: Table<TData> }) {
               <th key={header.id}>
                 {header.isPlaceholder
                   ? null
-                  : flexRender(header.column.columnDef.footer, header.getContext())}
+                  : flexRender(
+                      header.column.columnDef.footer,
+                      header.getContext()
+                    )}
               </th>
             ))}
           </tr>
