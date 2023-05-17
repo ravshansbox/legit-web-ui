@@ -9,7 +9,7 @@
   "devDependencies": {
     "@ravshansbox/react-form": "^1.0.0",
     "@stitches/react": "^1.2.8",
-    "@tanstack/react-query": "^4.29.5",
+    "@tanstack/react-query": "^4.29.7",
     "@tanstack/react-table": "^8.9.1",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
@@ -19,9 +19,9 @@
     "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.1",
+    "react-router-dom": "^6.11.2",
     "typescript": "^5.0.4",
-    "vite": "^4.3.5"
+    "vite": "^4.3.7"
   },
   "prettier": {
     "singleQuote": true
